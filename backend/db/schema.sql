@@ -26,7 +26,7 @@ CREATE TABLE jobs (
   FOREIGN KEY(status_id) REFERENCES statuses(id) ON UPDATE CASCADE ON DELETE SET NULL
 );
 CREATE TABLE jobs_details (
-  job_id INTEGER UNIQUE NOT NULL,
+  job_id INTEGER PRIMARY KEY,
   title VARCHAR(128),
   source VARCHAR(16),
   location VARCHAR(64),
