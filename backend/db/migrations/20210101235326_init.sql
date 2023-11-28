@@ -285,6 +285,31 @@ GROUP BY
 ORDER BY
   jobs.updated_at DESC;
 
+CREATE VIEW task_list
+AS
+SELECT tasks.id AS "Task ID", tasks.job_id,
+  tasks.description AS "Task",
+  tasks.due_at AS "Due date",
+  statuses.title AS "Job status",
+  jobs_details.title AS "Job title",
+  companies.name AS "Company",
+  jobs_details.app_url AS "Application link",
+  jobs_details.posting_url AS "Post link",
+  tasks.created_at AS "Task created at",
+  tasks.updated_at AS "Task updated at"
+FROM tasks
+LEFT JOIN jobs
+ON tasks.job_id = jobs.id
+LEFT JOIN jobs_details
+ON tasks.job_id = jobs_details.job_id
+LEFT JOIN statuses
+ON jobs.status_id = statuses.id
+LEFT JOIN companies
+ON jobs.company_id = companies.id
+WHERE tasks.completed_at IS NULL
+  AND tasks.deleted_at IS NULL
+ORDER BY due_at;
+
 -- migrate:down
 DROP VIEW IF EXISTS jobs_list_main;
 DROP TABLE IF EXISTS interviews_to_contacts;
