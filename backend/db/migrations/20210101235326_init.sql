@@ -7,7 +7,8 @@ CREATE TABLE companies (
   glassdoor VARCHAR,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT (now()),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT (now()),
-  deleted_at TIMESTAMP WITH TIME ZONE
+  deleted_at TIMESTAMP WITH TIME ZONE,
+  hunt_id VARCHAR
 );
 
 CREATE TABLE statuses (
@@ -259,6 +260,51 @@ CREATE TABLE interviews_to_contacts (
     ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+-- Imported from Huntr export; for historical purposes only
+-- at time of writing.
+CREATE TABLE h_actions (
+  "id" VARCHAR,
+  "actionType" VARCHAR,
+  "date" VARCHAR,
+  "createdAt" VARCHAR,
+  "createdByWorkflow" VARCHAR,
+  "jobId" VARCHAR,
+  "jobTitle" VARCHAR,
+  "jobLocation" VARCHAR,
+  "jobSalary" VARCHAR,
+  "jobUrl" VARCHAR,
+  "boardId" VARCHAR,
+  "boardName" VARCHAR,
+  "companyId" VARCHAR,
+  "companyName" VARCHAR,
+  "companyDomain" VARCHAR,
+  "companyLocation" VARCHAR,
+  "companyFoundedYear" VARCHAR,
+  "activityId" VARCHAR,
+  "activityTitle" VARCHAR,
+  "activityNote" VARCHAR,
+  "activityCompleted" VARCHAR,
+  "activityCompletedAt" VARCHAR,
+  "activityStartAt" VARCHAR,
+  "activityEndAt" VARCHAR,
+  "fromListName" VARCHAR,
+  "toListName" VARCHAR,
+  "activityCategoryId" VARCHAR,
+  "activityCategoryName" VARCHAR,
+  "noteId" VARCHAR,
+  "noteText" VARCHAR,
+  "contactId" VARCHAR,
+  "contactFirstName" VARCHAR,
+  "contactLastName" VARCHAR,
+  "contactEmail" VARCHAR,
+  "contactTitle" VARCHAR,
+  "contactEmployerId" VARCHAR,
+  "creatorUserId" VARCHAR,
+  "creatorUserFirstName" VARCHAR,
+  "creatorUserLastName" VARCHAR,
+  "creatorUserEmail" VARCHAR
+);
+
 -- Create a dashboard
 CREATE VIEW jobs_list_main AS
 SELECT
@@ -311,7 +357,9 @@ WHERE tasks.completed_at IS NULL
 ORDER BY due_at;
 
 -- migrate:down
+DROP VIEW IF EXISTS task_list;
 DROP VIEW IF EXISTS jobs_list_main;
+DROP TABLE IF EXISTS h_actions;
 DROP TABLE IF EXISTS interviews_to_contacts;
 DROP TABLE IF EXISTS interviews;
 DROP TABLE IF EXISTS jobs_to_reference_contacts;

@@ -1,0 +1,14 @@
+
+[cors]
+alloworigin = ["http://localhost:3001", "http://127.0.0.1:3001"]
+allowheaders = ["Content-Type", "X-Custom-Header"]
+allowmethods = ["GET", "DELETE", "POST", "PUT", "PATCH", "OPTIONS"]
+
+
+[queries]
+location = "/app/queries/"
+
+# TODO: restrict access to only needed DB tables
+# [access]
+# restrict = true  
+

@@ -1,0 +1,53 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres:15.4-bullseye
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+     - ./pgdata:/var/lib/postgresql/data
+  
+  prest:
+    # use latest build - analyze the risk of using this version in production
+    image: prest/prest
+    environment:
+      - PREST_DEBUG=true
+      - PREST_VERSION=2
+      - PREST_AUTH_ENABLED=true
+      - PREST_PG_HOST=db
+      - PREST_PG_USER=postgres
+      - PREST_PG_PASS=example
+      - PREST_PG_DATABASE=postgres
+      - PREST_PG_PORT=5432
+      - PREST_PG_SSL_MODE=disable
+      - PREST_CACHE_ENABLED=false
+      - PREST_CACHE=false
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./db/queries:/app/queries:ro # not working rn b/c toml config doesn't seem to be loading.
+      - ./prest/prest.toml:/app/prest.toml:ro # also not working rn
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 6543:8080
+
+  db-pgadmin:
+    image: dpage/pgadmin4:6.18
+    restart: always
+    env_file:
+      - ./db-pgadmin/pgadmin.env
+    ports:
+      - '127.0.0.1:8888:80'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+
+volumes:
+  pgadmin:
